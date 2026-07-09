@@ -1,0 +1,34 @@
+.dataview-lite {
+  margin: 1rem 0;
+
+  .dataview-lite-loading,
+  .dataview-lite-empty {
+    color: var(--gray);
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+
+  .dataview-lite-error {
+    border: 1px solid var(--lightgray);
+    border-left: 3px solid var(--tertiary);
+    border-radius: 0 6px 6px 0;
+    padding: 0.5rem 1rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+  }
+
+  .dataview-lite-group {
+    margin: 1.25rem 0 0.25rem 0;
+    font-size: 1rem;
+
+    .dataview-lite-count {
+      color: var(--gray);
+      font-weight: normal;
+      font-size: 0.85rem;
+    }
+  }
+
+  .dataview-lite-list {
+    margin: 0.25rem 0;
+  }
+}

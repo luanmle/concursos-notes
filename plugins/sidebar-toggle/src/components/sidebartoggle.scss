@@ -1,0 +1,49 @@
+button.sidebar-toggle {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gray);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--secondary);
+    background: var(--highlight);
+  }
+}
+
+// Recolhida: só o botão fica visível, numa faixa estreita
+html.sidebar-collapsed .sidebar.left > *:not(.sidebar-toggle) {
+  display: none !important;
+}
+
+@media all and (min-width: 1200px) {
+  html.sidebar-collapsed .page > #quartz-body {
+    grid-template-columns: 3.5rem auto 320px;
+  }
+}
+
+@media all and (min-width: 800px) and (max-width: 1200px) {
+  html.sidebar-collapsed .page > #quartz-body {
+    grid-template-columns: 3.5rem auto;
+  }
+}
+
+@media all and (min-width: 800px) {
+  html.sidebar-collapsed .sidebar.left {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    align-items: center;
+  }
+}
+
+// No mobile a sidebar é horizontal; o toggle não faz sentido
+@media all and (max-width: 800px) {
+  button.sidebar-toggle {
+    display: none;
+  }
+}

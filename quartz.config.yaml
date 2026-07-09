@@ -1,45 +1,46 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: Quartz 5
-  pageTitleSuffix: ""
+  pageTitle: Concursos Notes
+  pageTitleSuffix: "Concursos Notes"
   enableSPA: true
   enablePopovers: true
   analytics:
     provider: plausible
-  locale: en-US
+  locale: pt-BR
   baseUrl: concursos-notes.github.io
   ignorePatterns:
     - private
     - templates
+    - "05. Templates"
     - .obsidian
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Schibsted Grotesk
-      body: Source Sans Pro
-      code: IBM Plex Mono
+      header: Newsreader
+      body: Inter
+      code: JetBrains Mono
     colors:
       lightMode:
-        light: "#faf8f8"
-        lightgray: "#e5e5e5"
-        gray: "#b8b8b8"
-        darkgray: "#4e4e4e"
-        dark: "#2b2b2b"
-        secondary: "#284b63"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#fff23688"
+        light: "#fdfdfc"
+        lightgray: "#ececea"
+        gray: "#9b9b97"
+        darkgray: "#33383d"
+        dark: "#16181a"
+        secondary: "#2e5a87"
+        tertiary: "#5f7488"
+        highlight: rgba(46, 90, 135, 0.08)
+        textHighlight: "#ffe97a66"
       darkMode:
-        light: "#161618"
-        lightgray: "#393639"
-        gray: "#646464"
-        darkgray: "#d4d4d4"
-        dark: "#ebebec"
-        secondary: "#7b97aa"
-        tertiary: "#84a59d"
-        highlight: rgba(143, 159, 169, 0.15)
-        textHighlight: "#b3aa0288"
+        light: "#101114"
+        lightgray: "#26282d"
+        gray: "#6f7278"
+        darkgray: "#c9ccd1"
+        dark: "#eceef0"
+        secondary: "#8ab4dd"
+        tertiary: "#7f96a8"
+        highlight: rgba(138, 180, 221, 0.08)
+        textHighlight: "#d8c84f33"
 plugins:
   - source: github:quartz-community/created-modified-date
     enabled: true
@@ -54,8 +55,8 @@ plugins:
     enabled: true
     options:
       theme:
-        light: github-light
-        dark: github-dark
+        light: min-light
+        dark: min-dark
       keepBackground: false
     order: 20
   - source: github:quartz-community/obsidian-flavored-markdown
@@ -83,6 +84,7 @@ plugins:
     layout:
       position: right
       priority: 30
+      condition: has-toc
   - source: github:quartz-community/crawl-links
     enabled: true
     options:
@@ -158,7 +160,7 @@ plugins:
       position: left
       priority: 50
   - source: github:quartz-community/graph
-    enabled: true
+    enabled: false
     layout:
       position: right
       priority: 10
@@ -173,8 +175,9 @@ plugins:
   - source: github:quartz-community/backlinks
     enabled: true
     layout:
-      position: right
-      priority: 50
+      position: afterBody
+      priority: 10
+      condition: has-backlinks
   - source: github:quartz-community/article-title
     enabled: true
     layout:
@@ -214,13 +217,25 @@ plugins:
       priority: 5
       condition: not-index
   - source: github:quartz-community/comments
-    enabled: false
+    enabled: true
     options:
       provider: giscus
-      options: {}
+      options:
+        # Gere estes valores em https://giscus.app depois de:
+        # 1. habilitar Discussions no repositório (Settings → Features)
+        # 2. instalar o app giscus em github.com/apps/giscus
+        repo: luanmle/concursos-notes
+        repoId: R_kgDOTObeYg
+        category: Announcements
+        categoryId: DIC_kwDOTObeYs4DA20l
+        mapping: pathname
+        strict: false
+        reactionsEnabled: true
+        inputPosition: bottom
+        lang: pt
     layout:
       position: afterBody
-      priority: 10
+      priority: 20
   - source: github:quartz-community/footer
     enabled: true
     options:
@@ -262,7 +277,7 @@ plugins:
       name: quartz-themes
       repo: github:saberzero1/quartz-themes
       subdir: plugin
-    enabled: true
+    enabled: false
     options:
       theme: default
   - source: github:quartz-community/obsidian-plugin-excalidraw
@@ -272,6 +287,25 @@ plugins:
       darkMode: auto
       exportPadding: 20
     order: 50
+  - source: ./plugins/note-actions
+    enabled: true
+    options:
+      repo: luanmle/concursos-notes
+      branch: v5
+    layout:
+      position: beforeBody
+      priority: 22
+  - source: ./plugins/sidebar-toggle
+    enabled: true
+    layout:
+      position: left
+      priority: 5
+  - source: ./plugins/dataview-lite
+    enabled: true
+    order: 15
+    layout:
+      position: beforeBody
+      priority: 90
 layout:
   groups:
     toolbar:

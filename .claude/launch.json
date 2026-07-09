@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "quartz",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [".claude/serve-quartz.sh"],
+      "port": 8081,
+      "autoPort": true
+    }
+  ]
+}
