@@ -1,9 +1,72 @@
 <%*
 const id = tp.date.now("YYYYMMDDHHmm");
-const nomeDisciplina = await tp.system.prompt("Digite o nome da disciplina (Ex: Direito Tributário):");
-const tituloNota = await tp.system.prompt("Digite o assunto da nota (Ex: Impostos Federais):");
-const topico = await tp.system.prompt("Tópico da ementa (Ex: 2. Direitos e Garantias Fundamentais):");
-const subtopico = await tp.system.prompt("Subtópico (opcional, Ex: Remédios Constitucionais):");
+
+// Aceita tanto o repositório inteiro quanto content/ como raiz da vault.
+const caminhosCatalogo = [
+  "content/05. Templates/catalogo-disciplinas.json",
+  "05. Templates/catalogo-disciplinas.json",
+];
+const caminhoCatalogo = caminhosCatalogo.find((caminho) =>
+  tp.app.vault.getAbstractFileByPath(caminho)
+);
+
+if (!caminhoCatalogo) {
+  throw new Error("Catálogo de disciplinas não encontrado em 05. Templates.");
+}
+
+const arquivoCatalogo = tp.app.vault.getAbstractFileByPath(caminhoCatalogo);
+const catalogo = JSON.parse(await tp.app.vault.read(arquivoCatalogo));
+const opcaoOutro = "➕ Informar outro valor";
+const opcaoSemSubtopico = "— Sem subtópico";
+
+async function selecionarOuInformar(opcoes, titulo, pergunta, permitirVazio = false) {
+  const itens = [...opcoes, ...(permitirVazio ? [opcaoSemSubtopico] : []), opcaoOutro];
+  const selecionado = await tp.system.suggester(
+    itens,
+    itens,
+    true,
+    titulo
+  );
+
+  if (selecionado === opcaoSemSubtopico) return "";
+  if (selecionado !== opcaoOutro) return selecionado;
+
+  const informado = await tp.system.prompt(pergunta, "", true);
+  const valor = informado?.trim();
+  if (!valor && !permitirVazio) throw new Error(`${titulo} não pode ficar vazio.`);
+  return valor ?? "";
+}
+
+const disciplinas = Object.keys(catalogo).sort((a, b) => a.localeCompare(b, "pt-BR"));
+const nomeDisciplina = await selecionarOuInformar(
+  disciplinas,
+  "Selecione a disciplina",
+  "Digite o nome da nova disciplina:"
+);
+
+const topicosDaDisciplina = Object.keys(catalogo[nomeDisciplina] ?? {}).sort((a, b) =>
+  a.localeCompare(b, "pt-BR", { numeric: true })
+);
+const topico = await selecionarOuInformar(
+  topicosDaDisciplina,
+  `Selecione o tópico de ${nomeDisciplina}`,
+  "Digite o tópico da ementa:"
+);
+
+const subtopicosDoTopico = catalogo[nomeDisciplina]?.[topico] ?? [];
+const subtopico = await selecionarOuInformar(
+  subtopicosDoTopico,
+  `Selecione o subtópico de ${topico}`,
+  "Digite o subtópico (opcional):",
+  true
+);
+
+const tituloNota = (await tp.system.prompt(
+  "Digite o assunto da nota (Ex: Impostos Federais):",
+  "",
+  true
+)).trim();
+if (!tituloNota) throw new Error("O assunto da nota não pode ficar vazio.");
 
 const nomeCompleto = `${id} - ${tituloNota}`;
 await tp.file.rename(nomeCompleto);

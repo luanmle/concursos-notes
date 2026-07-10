@@ -1,0 +1,33 @@
+{
+  "Ciência de Dados e TI": {},
+  "Contabilidade Geral": {},
+  "Direito Administrativo": {
+    "1. Administração Pública": [
+      "1.1 Princípios",
+      "1.2 Organização administrativa"
+    ],
+    "2. Atos Administrativos": [
+      "2.1 Elementos",
+      "2.2 Atributos",
+      "2.3 Extinção"
+    ]
+  },
+  "Direito Constitucional": {
+    "1. Teoria da Constituição": [
+      "1.1 Conceito",
+      "1.2 Classificações"
+    ],
+    "2. Direitos Fundamentais": [
+      "2.1 Direitos individuais",
+      "2.2 Direitos sociais"
+    ],
+    "Ministério Público": [
+      "Funções do Ministério Público"
+    ]
+  },
+  "Direito Penal": {},
+  "Informática": {},
+  "Legislações": {},
+  "Português": {},
+  "Raciocínio Lógico Matemático": {}
+}

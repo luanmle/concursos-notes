@@ -28,4 +28,3 @@ GROUP BY topico
 ```
 
 ---
-
