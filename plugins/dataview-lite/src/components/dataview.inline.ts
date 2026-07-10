@@ -274,6 +274,60 @@ function emptyMessage(): string {
   return `<p class="dataview-lite-empty">Nenhuma nota encontrada para esta consulta.</p>`
 }
 
+function setupDisciplineCards(files: Entry[]): void {
+  const cards = document.querySelectorAll<HTMLElement>(".discipline-card[data-discipline-tag]")
+  const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+
+  for (const card of cards) {
+    const tag = `disciplina/${card.dataset.disciplineTag}`
+    const notes = files.filter(
+      (entry) => entry.fm.tipo === "estudo-concurso" && entry.tags.includes(tag),
+    )
+    const latestTimestamp = notes.reduce((latest, entry) => {
+      const timestamp = Date.parse(entry.modified ?? entry.created ?? "")
+      return Number.isNaN(timestamp) ? latest : Math.max(latest, timestamp)
+    }, 0)
+    const countLabel = `${notes.length} ${notes.length === 1 ? "nota" : "notas"}`
+    const dateLabel = latestTimestamp
+      ? `atualizado em ${dateFormatter.format(new Date(latestTimestamp))}`
+      : "sem atualização"
+    const meta = card.querySelector<HTMLElement>(".discipline-meta")
+    if (meta) meta.textContent = `${countLabel} · ${dateLabel}`
+  }
+}
+
+function setupCentralCards(files: Entry[]): void {
+  const cards = document.querySelectorAll<HTMLElement>(".central-card[data-central-tag]")
+  const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  })
+
+  for (const card of cards) {
+    const category = card.dataset.centralTag
+    const notes = files.filter(
+      (entry) =>
+        entry.fm.tipo === "central-de-estudos" &&
+        (entry.fm.categoria === category || entry.tags.includes(`central/${category}`)),
+    )
+    const latestTimestamp = notes.reduce((latest, entry) => {
+      const timestamp = Date.parse(entry.modified ?? entry.created ?? "")
+      return Number.isNaN(timestamp) ? latest : Math.max(latest, timestamp)
+    }, 0)
+    const countLabel = `${notes.length} ${notes.length === 1 ? "nota" : "notas"}`
+    const dateLabel = latestTimestamp
+      ? `atualizado em ${dateFormatter.format(new Date(latestTimestamp))}`
+      : "sem atualização"
+    const meta = card.querySelector<HTMLElement>(".discipline-meta")
+    if (meta) meta.textContent = `${countLabel} · ${dateLabel}`
+  }
+}
+
 function setupDataviewLite() {
   const blocks = document.querySelectorAll<HTMLElement>(".dataview-lite[data-query]")
   if (blocks.length === 0) return
@@ -285,6 +339,8 @@ function setupDataviewLite() {
   } catch {
     return
   }
+  setupDisciplineCards(files)
+  setupCentralCards(files)
   for (const el of blocks) {
     try {
       const q = parseQuery(decodeQuery(el.dataset.query!))

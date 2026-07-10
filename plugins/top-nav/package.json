@@ -1,0 +1,33 @@
+{
+  "name": "@concursos-notes/top-nav",
+  "version": "1.0.0",
+  "description": "Navegação superior minimalista entre Disciplinas e Central de Estudos",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": { "import": "./dist/index.js" },
+    "./components": { "import": "./dist/components/index.js" },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
+  "peerDependencies": { "preact": "^10.0.0" },
+  "quartz": {
+    "name": "top-nav",
+    "displayName": "Top Navigation",
+    "category": ["component"],
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "defaultOptions": {},
+    "components": {
+      "TopNav": {
+        "displayName": "Top Navigation",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 1
+      }
+    }
+  }
+}

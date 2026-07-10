@@ -1,8 +1,5 @@
-// plugins/dataview-lite/src/components/dataview.inline.ts
-var dataview_inline_default = '(()=>{function x(e){let t=Uint8Array.from(atob(e),r=>r.charCodeAt(0));return new TextDecoder().decode(t)}function E(e){return String(e??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}function b(e){let t=e.replace(/\\s+/g," ").trim(),r=t.match(/^(TABLE|LIST)(\\s+WITHOUT\\s+ID)?/i);if(!r)throw new Error("A consulta deve come\\xE7ar com TABLE ou LIST");let s=r[1].toUpperCase(),a=!!r[2],y=/\\s+(FROM|WHERE|SORT|GROUP\\s+BY)\\s+/gi,w=t.slice(r[0].length),n={},u="_cols",m=0,l;for(;(l=y.exec(w))!==null;)n[u]=w.slice(m,l.index).trim(),u=l[1].toUpperCase().replace(/\\s+/g," "),m=y.lastIndex;n[u]=w.slice(m).trim();let p=[];if(s==="TABLE"&&n._cols)for(let i of n._cols.split(",")){let h=i.trim();if(!h)continue;let f=h.match(/^(.+?)\\s+AS\\s+"([^"]+)"$/i);f?p.push({expr:f[1].trim(),alias:f[2]}):p.push({expr:h})}let d=[];if(n.FROM)for(let i of n.FROM.split(/\\s+OR\\s+/i)){let h=i.trim();h.startsWith("#")?d.push({tag:h.slice(1)}):h.startsWith(\'"\')&&d.push({folder:h.replace(/^"|"$/g,"")})}let o=[];if(n.WHERE)for(let i of n.WHERE.split(/\\s+AND\\s+/i)){let h=i.trim(),f=h.match(/^contains\\(\\s*([\\w.-]+)\\s*,\\s*"([^"]*)"\\s*\\)$/i);if(f){o.push({field:f[1],op:"contains",value:f[2]});continue}if(f=h.match(/^([\\w.-]+)\\s*(!=|=)\\s*"([^"]*)"$/),f){o.push({field:f[1],op:f[2],value:f[3]});continue}throw new Error(`Condi\\xE7\\xE3o WHERE n\\xE3o suportada: ${h}`)}let c;if(n.SORT){let i=n.SORT.match(/^(.+?)(?:\\s+(ASC|DESC))?$/i);i&&(c={expr:i[1].trim(),desc:(i[2]??"").toUpperCase()==="DESC"})}let g;if(n["GROUP BY"]){let i=n["GROUP BY"].match(/^([\\w.-]+)(?:\\s+AS\\s+"([^"]+)")?$/i);if(!i)throw new Error(`GROUP BY n\\xE3o suportado: ${n["GROUP BY"]}`);g={field:i[1],alias:i[2]}}return{kind:s,withoutId:a,columns:p,sources:d,where:o,sort:c,groupBy:g}}function $(e,t){let r=t.toLowerCase();return r==="file.link"||r==="file.name"?e.title:r==="file.folder"?e.folder:r==="file.ctime"||r==="data_criacao"?e.fm.data_criacao??e.created:r==="file.mtime"?e.modified:r==="tags"?e.tags:e.fm[t]??e.fm[r]}function L(e){return typeof e=="number"?e:Array.isArray(e)?e.join(", "):String(e??"")}function A(e,t){return t.length===0?!0:t.some(r=>{if(r.tag){let s=r.tag;return e.tags.some(a=>a===s||a.startsWith(s+"/"))}if(r.folder){let s=r.folder.replace(/^\\/+|\\/+$/g,"");return e.folder===s||e.folder.startsWith(s+"/")}return!1})}function B(e,t){return t.every(r=>{let s=$(e,r.field),a=Array.isArray(s)?s.map(String):String(s??"");return r.op==="="?String(s??"")===r.value:r.op==="!="?String(s??"")!==r.value:r.op==="contains"?(Array.isArray(a),a.includes(r.value)):!0})}function C(e){return`<a href="/${encodeURI(e.slug)}" class="internal">${E(e.title)}</a>`}function R(e,t){if(t.toLowerCase()==="file.link")return C(e);let r=$(e,t);return Array.isArray(r)?E(r.join(", ")):E(r??"\\u2014")}function M(e,t,r){let s=r.filter(n=>A(n,t.sources)&&B(n,t.where));if(t.groupBy){let n=new Map;for(let o of s){let c=$(o,t.groupBy.field),g=Array.isArray(c)?c.join(", "):String(c??"(sem valor)");n.has(g)||n.set(g,[]),n.get(g).push(o)}let u=[...n.entries()],m=o=>/length\\s*\\(\\s*rows/i.test(o);if(t.sort){let o=m(t.sort.expr)||t.columns.some(c=>m(c.expr)&&c.alias?.toLowerCase()===t.sort.expr.toLowerCase());u.sort((c,g)=>{let i=o?c[1].length-g[1].length:c[0].localeCompare(g[0],"pt-BR");return t.sort.desc?-i:i})}else u.sort((o,c)=>o[0].localeCompare(c[0],"pt-BR"));if(t.kind==="LIST"){let o="";for(let[c,g]of u)o+=`<h4 class="dataview-lite-group">${E(c)} <span class="dataview-lite-count">(${g.length})</span></h4>`,o+=`<ul class="dataview-lite-list">${g.map(i=>`<li>${C(i)}</li>`).join("")}</ul>`;e.innerHTML=o||T();return}let l=t.columns.length>0?t.columns:[{expr:"length(rows)",alias:"Notas"}],p=[t.groupBy.alias??t.groupBy.field,...l.map(o=>o.alias??o.expr)],d="";for(let[o,c]of u){let g=l.map(i=>{if(m(i.expr))return String(c.length);if(i.expr.toLowerCase()===t.groupBy.field.toLowerCase())return E(o);let h=[...new Set(c.map(f=>L($(f,i.expr))))].filter(f=>f!=="");return E(h.join(", ")||"\\u2014")});d+=`<tr><td>${E(o)}</td>${g.map(i=>`<td>${i}</td>`).join("")}</tr>`}e.innerHTML=S(p,d);return}if(t.sort){let{expr:n,desc:u}=t.sort;s.sort((m,l)=>{let p=L($(m,n)),d=L($(l,n)),o=typeof p=="number"&&typeof d=="number"?p-d:String(p).localeCompare(String(d),"pt-BR");return u?-o:o})}else s.sort((n,u)=>n.title.localeCompare(u.title,"pt-BR"));if(t.kind==="LIST"){e.innerHTML=s.length?`<ul class="dataview-lite-list">${s.map(n=>`<li>${C(n)}</li>`).join("")}</ul>`:T();return}let a=t.withoutId?[...t.columns]:[{expr:"file.link",alias:"Nota"},...t.columns],y=a.map(n=>n.alias??n.expr),w=s.map(n=>`<tr>${a.map(u=>`<td>${R(n,u.expr)}</td>`).join("")}</tr>`).join("");e.innerHTML=s.length?S(y,w):T()}function S(e,t){return`<div class="table-container dataview-lite-table"><table><thead><tr>${e.map(r=>`<th>${E(r)}</th>`).join("")}</tr></thead><tbody>${t}</tbody></table></div>`}function T(){return\'<p class="dataview-lite-empty">Nenhuma nota encontrada para esta consulta.</p>\'}function k(e){let t=document.querySelectorAll(".discipline-card[data-discipline-tag]"),r=new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});for(let s of t){let a=`disciplina/${s.dataset.disciplineTag}`,y=e.filter(l=>l.fm.tipo==="estudo-concurso"&&l.tags.includes(a)),w=y.reduce((l,p)=>{let d=Date.parse(p.modified??p.created??"");return Number.isNaN(d)?l:Math.max(l,d)},0),n=`${y.length} ${y.length===1?"nota":"notas"}`,u=w?`atualizado em ${r.format(new Date(w))}`:"sem atualiza\\xE7\\xE3o",m=s.querySelector(".discipline-meta");m&&(m.textContent=`${n} \\xB7 ${u}`)}}function H(e){let t=document.querySelectorAll(".central-card[data-central-tag]"),r=new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});for(let s of t){let a=s.dataset.centralTag,y=e.filter(l=>l.fm.tipo==="central-de-estudos"&&(l.fm.categoria===a||l.tags.includes(`central/${a}`))),w=y.reduce((l,p)=>{let d=Date.parse(p.modified??p.created??"");return Number.isNaN(d)?l:Math.max(l,d)},0),n=`${y.length} ${y.length===1?"nota":"notas"}`,u=w?`atualizado em ${r.format(new Date(w))}`:"sem atualiza\\xE7\\xE3o",m=s.querySelector(".discipline-meta");m&&(m.textContent=`${n} \\xB7 ${u}`)}}function v(){let e=document.querySelectorAll(".dataview-lite[data-query]");if(e.length===0)return;let t=document.getElementById("dataview-lite-index");if(!t||!t.textContent)return;let r;try{r=JSON.parse(t.textContent)}catch{return}k(r),H(r);for(let s of e)try{let a=b(x(s.dataset.query));M(s,a,r)}catch(a){s.innerHTML=`<div class="dataview-lite-error"><strong>Consulta Dataview n\\xE3o suportada:</strong> ${E(a instanceof Error?a.message:String(a))}</div>`}}document.addEventListener("nav",v);document.addEventListener("render",v);})();\n';
-
-// plugins/dataview-lite/src/components/dataview.scss
-var dataview_default = ".dataview-lite {\n  margin: 1rem 0;\n}\n.dataview-lite .dataview-lite-loading,\n.dataview-lite .dataview-lite-empty {\n  color: var(--gray);\n  font-size: 0.9rem;\n  font-style: italic;\n}\n.dataview-lite .dataview-lite-error {\n  border: 1px solid var(--lightgray);\n  border-left: 3px solid var(--tertiary);\n  border-radius: 0 6px 6px 0;\n  padding: 0.5rem 1rem;\n  color: var(--gray);\n  font-size: 0.9rem;\n}\n.dataview-lite .dataview-lite-group {\n  margin: 1.25rem 0 0.25rem 0;\n  font-size: 1rem;\n}\n.dataview-lite .dataview-lite-group .dataview-lite-count {\n  color: var(--gray);\n  font-weight: normal;\n  font-size: 0.85rem;\n}\n.dataview-lite .dataview-lite-list {\n  margin: 0.25rem 0;\n}";
+// node_modules/github-slugger/index.js
+var own = Object.hasOwnProperty;
 
 // node_modules/preact/dist/preact.mjs
 var n;
@@ -63,8 +60,8 @@ function I() {
   I.__r = 0;
 }
 function P(n2, l2, u3, t2, i2, r2, o2, e2, f3, c2, s2) {
-  var a2, h2, y2, d2, w2, g2, _, m2 = t2 && t2.__k || v, b = l2.length;
-  for (f3 = A(u3, l2, m2, f3, b), a2 = 0; a2 < b; a2++) null != (y2 = u3.__k[a2]) && (h2 = -1 != y2.__i && m2[y2.__i] || p, y2.__i = a2, g2 = z(n2, y2, h2, i2, r2, o2, e2, f3, c2, s2), d2 = y2.__e, y2.ref && h2.ref != y2.ref && (h2.ref && D(h2.ref, null, y2), s2.push(y2.ref, y2.__c || d2, y2)), null == w2 && null != d2 && (w2 = d2), (_ = !!(4 & y2.__u)) || h2.__k === y2.__k ? f3 = H(y2, f3, n2, _) : "function" == typeof y2.type && void 0 !== g2 ? f3 = g2 : d2 && (f3 = d2.nextSibling), y2.__u &= -7);
+  var a2, h2, y2, d2, w2, g2, _2, m2 = t2 && t2.__k || v, b = l2.length;
+  for (f3 = A(u3, l2, m2, f3, b), a2 = 0; a2 < b; a2++) null != (y2 = u3.__k[a2]) && (h2 = -1 != y2.__i && m2[y2.__i] || p, y2.__i = a2, g2 = z(n2, y2, h2, i2, r2, o2, e2, f3, c2, s2), d2 = y2.__e, y2.ref && h2.ref != y2.ref && (h2.ref && D(h2.ref, null, y2), s2.push(y2.ref, y2.__c || d2, y2)), null == w2 && null != d2 && (w2 = d2), (_2 = !!(4 & y2.__u)) || h2.__k === y2.__k ? f3 = H(y2, f3, n2, _2) : "function" == typeof y2.type && void 0 !== g2 ? f3 = g2 : d2 && (f3 = d2.nextSibling), y2.__u &= -7);
   return u3.__e = w2, f3;
 }
 function A(n2, l2, u3, t2, i2) {
@@ -125,11 +122,11 @@ function O(n2) {
   };
 }
 function z(n2, u3, t2, i2, r2, o2, e2, f3, c2, s2) {
-  var a2, h2, p2, y2, _, m2, b, S2, C2, M2, $2, I2, A2, H2, L, T2 = u3.type;
+  var a2, h2, p2, y2, _2, m2, b, S2, C2, M2, $2, I2, A2, H2, L, T2 = u3.type;
   if (void 0 !== u3.constructor) return null;
   128 & t2.__u && (c2 = !!(32 & t2.__u), o2 = [f3 = u3.__e = t2.__e]), (a2 = l.__b) && a2(u3);
   n: if ("function" == typeof T2) try {
-    if (S2 = u3.props, C2 = "prototype" in T2 && T2.prototype.render, M2 = (a2 = T2.contextType) && i2[a2.__c], $2 = a2 ? M2 ? M2.props.value : a2.__ : i2, t2.__c ? b = (h2 = u3.__c = t2.__c).__ = h2.__E : (C2 ? u3.__c = h2 = new T2(S2, $2) : (u3.__c = h2 = new x(S2, $2), h2.constructor = T2, h2.render = G), M2 && M2.sub(h2), h2.state || (h2.state = {}), h2.__n = i2, p2 = h2.__d = true, h2.__h = [], h2._sb = []), C2 && null == h2.__s && (h2.__s = h2.state), C2 && null != T2.getDerivedStateFromProps && (h2.__s == h2.state && (h2.__s = w({}, h2.__s)), w(h2.__s, T2.getDerivedStateFromProps(S2, h2.__s))), y2 = h2.props, _ = h2.state, h2.__v = u3, p2) C2 && null == T2.getDerivedStateFromProps && null != h2.componentWillMount && h2.componentWillMount(), C2 && null != h2.componentDidMount && h2.__h.push(h2.componentDidMount);
+    if (S2 = u3.props, C2 = "prototype" in T2 && T2.prototype.render, M2 = (a2 = T2.contextType) && i2[a2.__c], $2 = a2 ? M2 ? M2.props.value : a2.__ : i2, t2.__c ? b = (h2 = u3.__c = t2.__c).__ = h2.__E : (C2 ? u3.__c = h2 = new T2(S2, $2) : (u3.__c = h2 = new x(S2, $2), h2.constructor = T2, h2.render = G), M2 && M2.sub(h2), h2.state || (h2.state = {}), h2.__n = i2, p2 = h2.__d = true, h2.__h = [], h2._sb = []), C2 && null == h2.__s && (h2.__s = h2.state), C2 && null != T2.getDerivedStateFromProps && (h2.__s == h2.state && (h2.__s = w({}, h2.__s)), w(h2.__s, T2.getDerivedStateFromProps(S2, h2.__s))), y2 = h2.props, _2 = h2.state, h2.__v = u3, p2) C2 && null == T2.getDerivedStateFromProps && null != h2.componentWillMount && h2.componentWillMount(), C2 && null != h2.componentDidMount && h2.__h.push(h2.componentDidMount);
     else {
       if (C2 && null == T2.getDerivedStateFromProps && S2 !== y2 && null != h2.componentWillReceiveProps && h2.componentWillReceiveProps(S2, $2), u3.__v == t2.__v || !h2.__e && null != h2.shouldComponentUpdate && false === h2.shouldComponentUpdate(S2, h2.__s, $2)) {
         u3.__v != t2.__v && (h2.props = S2, h2.state = h2.__s, h2.__d = false), u3.__e = t2.__e, u3.__k = t2.__k, u3.__k.some(function(n3) {
@@ -138,14 +135,14 @@ function z(n2, u3, t2, i2, r2, o2, e2, f3, c2, s2) {
         break n;
       }
       null != h2.componentWillUpdate && h2.componentWillUpdate(S2, h2.__s, $2), C2 && null != h2.componentDidUpdate && h2.__h.push(function() {
-        h2.componentDidUpdate(y2, _, m2);
+        h2.componentDidUpdate(y2, _2, m2);
       });
     }
     if (h2.context = $2, h2.props = S2, h2.__P = n2, h2.__e = false, I2 = l.__r, A2 = 0, C2) h2.state = h2.__s, h2.__d = false, I2 && I2(u3), a2 = h2.render(h2.props, h2.state, h2.context), v.push.apply(h2.__h, h2._sb), h2._sb = [];
     else do {
       h2.__d = false, I2 && I2(u3), a2 = h2.render(h2.props, h2.state, h2.context), h2.state = h2.__s;
     } while (h2.__d && ++A2 < 25);
-    h2.state = h2.__s, null != h2.getChildContext && (i2 = w(w({}, i2), h2.getChildContext())), C2 && !p2 && null != h2.getSnapshotBeforeUpdate && (m2 = h2.getSnapshotBeforeUpdate(y2, _)), H2 = null != a2 && a2.type === k && null == a2.key ? q(a2.props.children) : a2, f3 = P(n2, d(H2) ? H2 : [H2], u3, t2, i2, r2, o2, e2, f3, c2, s2), h2.base = u3.__e, u3.__u &= -161, h2.__h.length && e2.push(h2), b && (h2.__E = h2.__ = null);
+    h2.state = h2.__s, null != h2.getChildContext && (i2 = w(w({}, i2), h2.getChildContext())), C2 && !p2 && null != h2.getSnapshotBeforeUpdate && (m2 = h2.getSnapshotBeforeUpdate(y2, _2)), H2 = null != a2 && a2.type === k && null == a2.key ? q(a2.props.children) : a2, f3 = P(n2, d(H2) ? H2 : [H2], u3, t2, i2, r2, o2, e2, f3, c2, s2), h2.base = u3.__e, u3.__u &= -161, h2.__h.length && e2.push(h2), b && (h2.__E = h2.__ = null);
   } catch (n3) {
     if (u3.__v = null, c2 || null != o2) if (n3.then) {
       for (u3.__u |= c2 ? 160 : 128; f3 && 8 == f3.nodeType && f3.nextSibling; ) f3 = f3.nextSibling;
@@ -179,7 +176,7 @@ function q(n2) {
   return "object" != typeof n2 || null == n2 || n2.__b > 0 ? n2 : d(n2) ? n2.map(q) : w({}, n2);
 }
 function B(u3, t2, i2, r2, o2, e2, f3, c2, s2) {
-  var a2, h2, v2, y2, w2, _, m2, b = i2.props || p, k2 = t2.props, x2 = t2.type;
+  var a2, h2, v2, y2, w2, _2, m2, b = i2.props || p, k2 = t2.props, x2 = t2.type;
   if ("svg" == x2 ? o2 = "http://www.w3.org/2000/svg" : "math" == x2 ? o2 = "http://www.w3.org/1998/Math/MathML" : o2 || (o2 = "http://www.w3.org/1999/xhtml"), null != e2) {
     for (a2 = 0; a2 < e2.length; a2++) if ((w2 = e2[a2]) && "setAttribute" in w2 == !!x2 && (x2 ? w2.localName == x2 : 3 == w2.nodeType)) {
       u3 = w2, e2[a2] = null;
@@ -194,10 +191,10 @@ function B(u3, t2, i2, r2, o2, e2, f3, c2, s2) {
   else {
     if (e2 = e2 && n.call(u3.childNodes), !c2 && null != e2) for (b = {}, a2 = 0; a2 < u3.attributes.length; a2++) b[(w2 = u3.attributes[a2]).name] = w2.value;
     for (a2 in b) w2 = b[a2], "dangerouslySetInnerHTML" == a2 ? v2 = w2 : "children" == a2 || a2 in k2 || "value" == a2 && "defaultValue" in k2 || "checked" == a2 && "defaultChecked" in k2 || F(u3, a2, null, w2, o2);
-    for (a2 in k2) w2 = k2[a2], "children" == a2 ? y2 = w2 : "dangerouslySetInnerHTML" == a2 ? h2 = w2 : "value" == a2 ? _ = w2 : "checked" == a2 ? m2 = w2 : c2 && "function" != typeof w2 || b[a2] === w2 || F(u3, a2, w2, b[a2], o2);
+    for (a2 in k2) w2 = k2[a2], "children" == a2 ? y2 = w2 : "dangerouslySetInnerHTML" == a2 ? h2 = w2 : "value" == a2 ? _2 = w2 : "checked" == a2 ? m2 = w2 : c2 && "function" != typeof w2 || b[a2] === w2 || F(u3, a2, w2, b[a2], o2);
     if (h2) c2 || v2 && (h2.__html == v2.__html || h2.__html == u3.innerHTML) || (u3.innerHTML = h2.__html), t2.__k = [];
     else if (v2 && (u3.innerHTML = ""), P("template" == t2.type ? u3.content : u3, d(y2) ? y2 : [y2], t2, i2, r2, "foreignObject" == x2 ? "http://www.w3.org/1999/xhtml" : o2, e2, f3, e2 ? e2[0] : i2.__k && S(i2, 0), c2, s2), null != e2) for (a2 = e2.length; a2--; ) g(e2[a2]);
-    c2 || (a2 = "value", "progress" == x2 && null == _ ? u3.removeAttribute("value") : null != _ && (_ !== u3[a2] || "progress" == x2 && !_ || "option" == x2 && _ != b[a2]) && F(u3, a2, _, b[a2], o2), a2 = "checked", null != m2 && m2 != u3[a2] && F(u3, a2, m2, b[a2], o2));
+    c2 || (a2 = "value", "progress" == x2 && null == _2 ? u3.removeAttribute("value") : null != _2 && (_2 !== u3[a2] || "progress" == x2 && !_2 || "option" == x2 && _2 != b[a2]) && F(u3, a2, _2, b[a2], o2), a2 = "checked", null != m2 && m2 != u3[a2] && F(u3, a2, m2, b[a2], o2));
   }
   return u3;
 }
@@ -256,50 +253,95 @@ function u2(e2, t2, n2, o2, i2, u3) {
   return l.vnode && l.vnode(l2), l2;
 }
 
-// plugins/dataview-lite/src/components/DataviewLite.tsx
-var EXCLUDED_FM_KEYS = /* @__PURE__ */ new Set(["password", "title", "tags"]);
-var DataviewLiteConstructor = () => {
-  const DataviewLite = ({ fileData, allFiles }) => {
-    if (!fileData.dataviewLite) return null;
-    const entries = [];
-    for (const f3 of allFiles) {
-      const slug = f3.slug;
-      if (!slug || slug === "404") continue;
-      const frontmatter = f3.frontmatter ?? {};
-      const filePath = f3.filePath ?? "";
-      const folder = filePath.replace(/^content\//, "").split("/").slice(0, -1).join("/");
-      const rawTags = frontmatter.tags ?? [];
-      const tags = (Array.isArray(rawTags) ? rawTags : [rawTags]).map((t2) => String(t2).replace(/^#/, "")).filter(Boolean);
-      const fm = {};
-      for (const [k2, v2] of Object.entries(frontmatter)) {
-        if (!EXCLUDED_FM_KEYS.has(k2) && v2 !== null && v2 !== void 0) fm[k2] = v2;
-      }
-      const dates = f3.dates;
-      entries.push({
-        slug,
-        title: frontmatter.title ?? slug.split("/").pop() ?? slug,
-        folder,
-        tags,
-        fm,
-        created: dates?.created ? new Date(dates.created).toISOString() : void 0,
-        modified: dates?.modified ? new Date(dates.modified).toISOString() : void 0
-      });
-    }
-    const json = JSON.stringify(entries).replace(/</g, "\\u003c");
-    return /* @__PURE__ */ u2(
-      "script",
-      {
-        id: "dataview-lite-index",
-        type: "application/json",
-        dangerouslySetInnerHTML: { __html: json }
-      }
-    );
+// node_modules/@quartz-community/utils/dist/index.js
+function simplifySlug(fp) {
+  const res = stripSlashes(trimSuffix(fp, "index"), true);
+  return res.length === 0 ? "/" : res;
+}
+function joinSegments(...args) {
+  if (args.length === 0) {
+    return "";
+  }
+  let joined = args.filter((segment) => segment !== "" && segment !== "/").map((segment) => stripSlashes(segment)).join("/");
+  const first = args[0];
+  const last = args[args.length - 1];
+  if (first?.startsWith("/")) {
+    joined = "/" + joined;
+  }
+  if (last?.endsWith("/")) {
+    joined = joined + "/";
+  }
+  return joined;
+}
+function endsWith(s2, suffix) {
+  return s2 === suffix || s2.endsWith("/" + suffix);
+}
+function trimSuffix(s2, suffix) {
+  if (endsWith(s2, suffix)) {
+    s2 = s2.slice(0, -suffix.length);
+  }
+  return s2;
+}
+function stripSlashes(s2, onlyStripPrefix) {
+  if (s2.startsWith("/")) {
+    s2 = s2.substring(1);
+  }
+  if (!onlyStripPrefix && s2.endsWith("/")) {
+    s2 = s2.slice(0, -1);
+  }
+  return s2;
+}
+function pathToRoot(slug2) {
+  let rootPath = slug2.split("/").filter((x2) => x2 !== "").slice(0, -1).map((_2) => "..").join("/");
+  if (rootPath.length === 0) {
+    rootPath = ".";
+  }
+  return rootPath;
+}
+function resolveRelative(current, target) {
+  const res = joinSegments(pathToRoot(current), simplifySlug(target));
+  return res;
+}
+var U200D = String.fromCharCode(8205);
+
+// plugins/top-nav/src/components/topnav.scss
+var topnav_default = '.top-nav {\n  display: flex;\n  min-width: 0;\n  flex: 1;\n  align-items: center;\n  gap: 1rem;\n}\n\n.top-nav-mark {\n  display: inline-flex;\n  width: 1.75rem;\n  height: 1.75rem;\n  flex: 0 0 auto;\n  align-items: center;\n  justify-content: center;\n  border: 1px solid var(--lightgray);\n  border-radius: 0.35rem;\n  color: var(--darkgray);\n  font-family: var(--codeFont);\n  font-size: 0.58rem;\n  font-weight: 600;\n  letter-spacing: -0.03em;\n  text-decoration: none;\n  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;\n}\n.top-nav-mark:hover {\n  border-color: var(--gray);\n  background: var(--highlight);\n  color: var(--dark);\n}\n\n.top-nav-links {\n  display: flex;\n  min-width: 0;\n  align-items: center;\n  gap: 0.25rem;\n}\n\n.top-nav-link {\n  position: relative;\n  padding: 0.4rem 0.55rem;\n  border-radius: 0.3rem;\n  color: var(--gray);\n  font-size: 0.78rem;\n  font-weight: 500;\n  line-height: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  transition: color 160ms ease, background-color 160ms ease;\n}\n.top-nav-link:hover {\n  background: var(--highlight);\n  color: var(--dark);\n}\n.top-nav-link.is-active {\n  color: var(--dark);\n}\n.top-nav-link.is-active::after {\n  position: absolute;\n  right: 0.55rem;\n  bottom: 0.1rem;\n  left: 0.55rem;\n  height: 1px;\n  background: var(--secondary);\n  content: "";\n}\n\n.top-nav-mark:focus-visible,\n.top-nav-link:focus-visible {\n  outline: 2px solid var(--secondary);\n  outline-offset: 2px;\n}\n\n@media all and (max-width: 520px) {\n  .top-nav {\n    gap: 0.4rem;\n  }\n  .top-nav-mark {\n    display: none;\n  }\n  .top-nav-links {\n    gap: 0;\n  }\n  .top-nav-link {\n    padding-inline: 0.4rem;\n    font-size: 0.72rem;\n  }\n  .top-nav-link.is-active::after {\n    right: 0.4rem;\n    left: 0.4rem;\n  }\n}';
+
+// plugins/top-nav/src/components/TopNav.tsx
+var TopNavConstructor = () => {
+  const TopNav = ({ fileData, displayClass }) => {
+    const slug2 = fileData.slug;
+    const inCentral = String(slug2).startsWith("01.-central-de-estudos");
+    const disciplinesHref = resolveRelative(slug2, "index");
+    const centralHref = resolveRelative(slug2, "01.-central-de-estudos/index");
+    return /* @__PURE__ */ u2("nav", { class: `top-nav ${displayClass ?? ""}`, "aria-label": "Navega\xE7\xE3o principal", children: [
+      /* @__PURE__ */ u2("a", { class: "top-nav-mark", href: disciplinesHref, "aria-label": "Concursos Notes \u2014 in\xEDcio", children: /* @__PURE__ */ u2("span", { "aria-hidden": "true", children: "CN" }) }),
+      /* @__PURE__ */ u2("div", { class: "top-nav-links", children: [
+        /* @__PURE__ */ u2(
+          "a",
+          {
+            href: disciplinesHref,
+            class: `top-nav-link ${!inCentral ? "is-active" : ""}`,
+            "aria-current": !inCentral ? "page" : void 0,
+            children: "Disciplinas"
+          }
+        ),
+        /* @__PURE__ */ u2(
+          "a",
+          {
+            href: centralHref,
+            class: `top-nav-link ${inCentral ? "is-active" : ""}`,
+            "aria-current": inCentral ? "page" : void 0,
+            children: "Central de Estudos"
+          }
+        )
+      ] })
+    ] });
   };
-  DataviewLite.css = dataview_default;
-  DataviewLite.afterDOMLoaded = dataview_inline_default;
-  return DataviewLite;
+  TopNav.css = topnav_default;
+  return TopNav;
 };
-var DataviewLite_default = DataviewLiteConstructor;
+var TopNav_default = TopNavConstructor;
 export {
-  DataviewLite_default as DataviewLite
+  TopNav_default as TopNav
 };

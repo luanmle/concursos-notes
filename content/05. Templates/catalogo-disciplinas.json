@@ -1,6 +1,10 @@
 {
-  "Ciência de Dados e TI": {},
+  "Administração Geral e Pública": {},
+  "Arquivologia": {},
+  "Auditoria": {},
+  "Ciência de Dados": {},
   "Contabilidade Geral": {},
+  "Contabilidade Pública": {},
   "Direito Administrativo": {
     "1. Administração Pública": [
       "1.1 Princípios",
@@ -12,6 +16,7 @@
       "2.3 Extinção"
     ]
   },
+  "Direito Civil": {},
   "Direito Constitucional": {
     "1. Teoria da Constituição": [
       "1.1 Conceito",
@@ -26,8 +31,13 @@
     ]
   },
   "Direito Penal": {},
+  "Direito Processual Penal": {},
+  "Direito Tributário": {},
+  "Estatística": {},
   "Informática": {},
   "Legislações": {},
+  "Matemática Financeira": {},
   "Português": {},
-  "Raciocínio Lógico Matemático": {}
+  "Raciocínio Lógico Matemático": {},
+  "Tecnologia da Informação": {}
 }

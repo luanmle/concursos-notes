@@ -38,7 +38,7 @@ const textLoaders = {
   },
 }
 
-const plugins = ["note-actions", "sidebar-toggle", "dataview-lite"]
+const plugins = ["note-actions", "sidebar-toggle", "dataview-lite", "top-nav"]
 
 for (const name of plugins) {
   const base = path.join(here, name)

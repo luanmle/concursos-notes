@@ -170,8 +170,6 @@ plugins:
       position: beforeBody
       priority: 2
       group: toolbar
-      groupOptions:
-        grow: true
   - source: github:quartz-community/backlinks
     enabled: true
     layout:
@@ -194,7 +192,7 @@ plugins:
       position: beforeBody
       priority: 30
   - source: github:quartz-community/page-title
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 1
@@ -298,6 +296,14 @@ plugins:
       position: beforeBody
       priority: 5
       group: toolbar
+  - source: ./plugins/top-nav
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 1
+      group: toolbar
+      groupOptions:
+        grow: true
   - source: ./plugins/sidebar-toggle
     enabled: false
     layout:
