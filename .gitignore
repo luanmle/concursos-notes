@@ -11,3 +11,8 @@ private/
 replit.nix
 .quartz/
 quartz/cli/tui/dist/
+
+# Claude Copilot - skills, contextos e configurações locais
+.agents/
+.claude/
+skills-lock.json
