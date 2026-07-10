@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: pt-BR
-  baseUrl: muirae.me/concursos-notes
+  baseUrl: concursos-notes.github.io
   ignorePatterns:
     - private
     - templates
