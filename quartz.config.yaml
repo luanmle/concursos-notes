@@ -155,7 +155,7 @@ plugins:
   - source: github:quartz-community/tag-page
     enabled: true
   - source: github:quartz-community/explorer
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 50
@@ -167,8 +167,8 @@ plugins:
   - source: github:quartz-community/search
     enabled: true
     layout:
-      position: left
-      priority: 20
+      position: beforeBody
+      priority: 2
       group: toolbar
       groupOptions:
         grow: true
@@ -196,19 +196,20 @@ plugins:
   - source: github:quartz-community/page-title
     enabled: true
     layout:
-      position: left
-      priority: 10
+      position: beforeBody
+      priority: 1
+      group: toolbar
   - source: github:quartz-community/darkmode
     enabled: true
     layout:
-      position: left
-      priority: 30
+      position: beforeBody
+      priority: 3
       group: toolbar
   - source: github:quartz-community/reader-mode
-    enabled: true
+    enabled: false
     layout:
-      position: left
-      priority: 35
+      position: beforeBody
+      priority: 4
       group: toolbar
   - source: github:quartz-community/breadcrumbs
     enabled: true
@@ -236,6 +237,7 @@ plugins:
     layout:
       position: afterBody
       priority: 20
+      condition: not-index
   - source: github:quartz-community/footer
     enabled: true
     options:
@@ -245,7 +247,7 @@ plugins:
   - source: github:quartz-community/recent-notes
     enabled: false
   - source: github:quartz-community/spacer
-    enabled: true
+    enabled: false
     options: {}
     order: 25
     layout:
@@ -296,7 +298,7 @@ plugins:
       position: beforeBody
       priority: 22
   - source: ./plugins/sidebar-toggle
-    enabled: true
+    enabled: false
     layout:
       position: left
       priority: 5
@@ -309,25 +311,21 @@ plugins:
 layout:
   groups:
     toolbar:
-      priority: 35
+      priority: 0
       direction: row
       gap: 0.5rem
   byPageType:
     "404":
+      template: full-width
       positions:
         beforeBody: []
         left: []
         right: []
-    content: {}
+    content:
+      template: full-width
     folder:
-      exclude:
-        - reader-mode
-      positions:
-        right: []
+      template: full-width
     tag:
-      exclude:
-        - reader-mode
-      positions:
-        right: []
+      template: full-width
     canvas: {}
     bases: {}

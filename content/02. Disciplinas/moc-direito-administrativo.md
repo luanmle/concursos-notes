@@ -29,12 +29,3 @@ GROUP BY topico
 
 ---
 
-## 🗂️ Ementa (tópicos e subtópicos)
-
-| Tópicos e Subtópicos de DIreito Administrativo |
-| :--------------------------------------------- |
-| **1.**                                         |
-| ↳ Atos administrativos                         |
-| Atributos do Ato administrativo                |
-|                                                |
-|                                                |
