@@ -16,7 +16,7 @@ $readingWidth: 45rem;
 .page > #quartz-body .center.full-width {
   min-width: 0;
   max-width: 100%;
-  padding: 6.5rem 1.5rem 0; // topo mais "suspenso"
+  padding: 1.5rem 1.5rem 0; // barra colada no topo
   box-sizing: border-box;
 
   // centraliza cada bloco de leitura na medida confortável
@@ -41,7 +41,7 @@ $readingWidth: 45rem;
   }
 
   @media all and (max-width: 800px) {
-    padding-top: 3rem;
+    padding-top: 1rem;
   }
 }
 
@@ -54,13 +54,55 @@ $readingWidth: 45rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--lightgray);
 
-  & .page-title,
-  & .page-title h1,
-  & .page-title h2 {
-    font-size: 1.15rem;
-    font-weight: 600;
+  // Título do site vira um ícone de "home" (link para a página inicial)
+  & .page-title {
     margin: 0;
-    white-space: nowrap;
+    line-height: 0;
+
+    & a {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0; // esconde o texto "Concursos Notes"
+      color: var(--gray);
+      transition: color 0.15s ease;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 1.35rem;
+        height: 1.35rem;
+        background-color: currentColor;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.1 1 12h3v9h6v-6h4v6h6v-9h3z'/%3E%3C/svg%3E")
+          no-repeat center / contain;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.1 1 12h3v9h6v-6h4v6h6v-9h3z'/%3E%3C/svg%3E")
+          no-repeat center / contain;
+      }
+
+      &:hover {
+        color: var(--secondary);
+      }
+    }
+  }
+
+  // Toggle de tema (sol/lua) mais sutil
+  & .darkmode {
+    opacity: 0.55;
+    transition: opacity 0.15s ease;
+
+    & svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    & .dayIcon,
+    & .nightIcon {
+      fill: var(--gray);
+      stroke: var(--gray);
+    }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   // Ações da nota (baixar / tela cheia / editar): ocultas, aparecem no hover.
