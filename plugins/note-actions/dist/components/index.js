@@ -2,7 +2,7 @@
 var noteactions_inline_default = '(()=>{function c(){let n=document.getElementById("note-actions-print");if(n){let e=()=>window.print();n.addEventListener("click",e),window.addCleanup(()=>n.removeEventListener("click",e))}let t=document.getElementById("note-actions-fullscreen");if(t){let e=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()};t.addEventListener("click",e),window.addCleanup(()=>t.removeEventListener("click",e))}}document.addEventListener("nav",c);})();\n';
 
 // plugins/note-actions/src/components/noteactions.scss
-var noteactions_default = ".note-actions {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.4rem;\n  margin: 0.75rem 0 0.25rem 0;\n}\n.note-actions .note-actions-btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.35rem;\n  padding: 0.25rem 0.6rem;\n  border: 1px solid var(--lightgray);\n  border-radius: 6px;\n  background: transparent;\n  color: var(--gray);\n  font-family: var(--bodyFont);\n  font-size: 0.78rem;\n  line-height: 1.4;\n  cursor: pointer;\n  text-decoration: none;\n  transition: color 0.15s ease, border-color 0.15s ease;\n}\n.note-actions .note-actions-btn:hover {\n  color: var(--secondary);\n  border-color: var(--secondary);\n}\n.note-actions .note-actions-btn svg {\n  flex-shrink: 0;\n}\n\n@media print {\n  .sidebar.left,\n  .sidebar.right,\n  .note-actions,\n  .breadcrumb-container,\n  .backlinks,\n  .giscus,\n  footer {\n    display: none !important;\n  }\n  .page > #quartz-body {\n    display: block !important;\n  }\n  .page > #quartz-body .center {\n    max-width: 100% !important;\n    padding: 0 !important;\n  }\n}";
+var noteactions_default = ".note-actions {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.4rem;\n  margin: 0 0 1.75rem 0;\n}\n.note-actions .note-actions-btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.35rem;\n  padding: 0.25rem 0.6rem;\n  border: 1px solid var(--lightgray);\n  border-radius: 6px;\n  background: transparent;\n  color: var(--gray);\n  font-family: var(--bodyFont);\n  font-size: 0.78rem;\n  line-height: 1.4;\n  cursor: pointer;\n  text-decoration: none;\n  transition: color 0.15s ease, border-color 0.15s ease;\n}\n.note-actions .note-actions-btn:hover {\n  color: var(--secondary);\n  border-color: var(--secondary);\n}\n.note-actions .note-actions-btn svg {\n  flex-shrink: 0;\n}\n\n@media print {\n  .sidebar.left,\n  .sidebar.right,\n  .note-actions,\n  .breadcrumb-container,\n  .backlinks,\n  .giscus,\n  footer {\n    display: none !important;\n  }\n  .page > #quartz-body {\n    display: block !important;\n  }\n  .page > #quartz-body .center {\n    max-width: 100% !important;\n    padding: 0 !important;\n  }\n}";
 
 // node_modules/preact/dist/preact.mjs
 var n;
@@ -386,16 +386,12 @@ var NoteActionsConstructor = (userOpts) => {
                 xmlns: "http://www.w3.org/2000/svg",
                 width: "16",
                 height: "16",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                "stroke-width": "2",
-                "stroke-linecap": "round",
-                "stroke-linejoin": "round",
-                children: /* @__PURE__ */ u2("path", { d: "M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" })
+                viewBox: "0 0 16 16",
+                fill: "currentColor",
+                children: /* @__PURE__ */ u2("path", { d: "M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" })
               }
             ),
-            /* @__PURE__ */ u2("span", { children: "Editar no GitHub" })
+            /* @__PURE__ */ u2("span", { children: "Editar" })
           ]
         }
       )

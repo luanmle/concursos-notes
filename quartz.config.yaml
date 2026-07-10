@@ -212,7 +212,7 @@ plugins:
       priority: 4
       group: toolbar
   - source: github:quartz-community/breadcrumbs
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 5
@@ -296,7 +296,7 @@ plugins:
       branch: v5
     layout:
       position: beforeBody
-      priority: 22
+      priority: 5
   - source: ./plugins/sidebar-toggle
     enabled: false
     layout:

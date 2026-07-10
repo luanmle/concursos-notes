@@ -16,7 +16,7 @@ $readingWidth: 45rem;
 .page > #quartz-body .center.full-width {
   min-width: 0;
   max-width: 100%;
-  padding: 0 1.5rem;
+  padding: 6.5rem 1.5rem 0; // topo mais "suspenso"
   box-sizing: border-box;
 
   // centraliza cada bloco de leitura na medida confortável
@@ -31,8 +31,17 @@ $readingWidth: 45rem;
     margin-right: auto;
   }
 
+  // o base aplica margin-top: 6rem aqui; o respiro do topo vem do padding acima
+  & > .page-header {
+    margin-top: 0;
+  }
+
   & > article {
     margin-top: 1.5rem;
+  }
+
+  @media all and (max-width: 800px) {
+    padding-top: 3rem;
   }
 }
 
@@ -41,7 +50,7 @@ $readingWidth: 45rem;
 .page > #quartz-body .center.full-width .popover-hint > .flex-component:first-child {
   align-items: center;
   gap: 1rem;
-  margin: 1rem 0 1.5rem 0;
+  margin: 0 0 1.5rem 0;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--lightgray);
 
