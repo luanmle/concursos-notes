@@ -62,6 +62,26 @@ $readingWidth: 45rem;
     margin: 0;
     white-space: nowrap;
   }
+
+  // Ações da nota (baixar / tela cheia / editar): ocultas, aparecem no hover.
+  // Só escondemos em dispositivos com mouse; no touch (sem hover) ficam visíveis.
+  & .note-actions {
+    transition: opacity 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    & .note-actions {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &:hover .note-actions,
+    & .note-actions.menu-open,
+    & .note-actions:focus-within {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------

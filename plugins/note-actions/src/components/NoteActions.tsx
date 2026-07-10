@@ -39,64 +39,55 @@ const NoteActionsConstructor: QuartzComponentConstructor<Partial<Options>> = (us
     const mdUrl = `/${slug}.md`
     const mdName = filePath.split("/").pop() ?? "nota.md"
 
+    const showDownload = opts.showDownloadMd || opts.showPdf
+
     return (
       <div class={`note-actions ${displayClass ?? ""}`}>
-        {opts.showDownloadMd && (
-          <a
-            class="note-actions-btn"
-            href={mdUrl}
-            download={mdName}
-            title="Baixar como Markdown (.md)"
-            aria-label="Baixar como Markdown"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+        {showDownload && (
+          <div class="note-actions-dl">
+            <button
+              class="note-actions-btn icon-only"
+              id="note-actions-download"
+              title="Baixar"
+              aria-label="Baixar"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            <span>.md</span>
-          </a>
-        )}
-        {opts.showPdf && (
-          <button
-            class="note-actions-btn"
-            id="note-actions-print"
-            title="Imprimir ou salvar como PDF"
-            aria-label="Imprimir ou salvar como PDF"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <polyline points="6 9 6 2 18 2 18 9" />
-              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-              <rect x="6" y="14" width="12" height="8" />
-            </svg>
-            <span>PDF</span>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </button>
+            <div class="note-actions-menu" id="note-actions-menu" hidden>
+              {opts.showDownloadMd && (
+                <a href={mdUrl} download={mdName} data-close-menu>
+                  Markdown (.md)
+                </a>
+              )}
+              {opts.showPdf && (
+                <button type="button" id="note-actions-pdf" data-close-menu>
+                  PDF
+                </button>
+              )}
+            </div>
+          </div>
         )}
         {opts.showFullscreen && (
           <button
-            class="note-actions-btn"
+            class="note-actions-btn icon-only"
             id="note-actions-fullscreen"
-            title="Alternar tela cheia"
+            title="Tela cheia"
             aria-label="Alternar tela cheia"
           >
             <svg
@@ -115,7 +106,6 @@ const NoteActionsConstructor: QuartzComponentConstructor<Partial<Options>> = (us
               <path d="M3 16v3a2 2 0 0 0 2 2h3" />
               <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
             </svg>
-            <span>Tela cheia</span>
           </button>
         )}
         {opts.showEdit && (

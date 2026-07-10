@@ -297,6 +297,7 @@ plugins:
     layout:
       position: beforeBody
       priority: 5
+      group: toolbar
   - source: ./plugins/sidebar-toggle
     enabled: false
     layout:

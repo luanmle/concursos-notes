@@ -1,8 +1,8 @@
 // plugins/note-actions/src/components/noteactions.inline.ts
-var noteactions_inline_default = '(()=>{function c(){let n=document.getElementById("note-actions-print");if(n){let e=()=>window.print();n.addEventListener("click",e),window.addCleanup(()=>n.removeEventListener("click",e))}let t=document.getElementById("note-actions-fullscreen");if(t){let e=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()};t.addEventListener("click",e),window.addCleanup(()=>t.removeEventListener("click",e))}}document.addEventListener("nav",c);})();\n';
+var noteactions_inline_default = '(()=>{function a(){let o=document.querySelector(".note-actions");if(!o)return;let n=document.getElementById("note-actions-download"),t=document.getElementById("note-actions-menu"),d=()=>{t&&(t.hidden=!0,n?.setAttribute("aria-expanded","false"),o.classList.remove("menu-open"))};if(n&&t){let e=s=>{s.stopPropagation();let l=t.hidden;t.hidden=!l,n.setAttribute("aria-expanded",String(l)),o.classList.toggle("menu-open",l)};n.addEventListener("click",e),window.addCleanup(()=>n.removeEventListener("click",e));let r=()=>d();document.addEventListener("click",r),window.addCleanup(()=>document.removeEventListener("click",r));let u=s=>{s.key==="Escape"&&d()};document.addEventListener("keydown",u),window.addCleanup(()=>document.removeEventListener("keydown",u))}let c=document.getElementById("note-actions-pdf");if(c){let e=()=>{d(),window.print()};c.addEventListener("click",e),window.addCleanup(()=>c.removeEventListener("click",e))}let i=document.getElementById("note-actions-fullscreen");if(i){let e=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()};i.addEventListener("click",e),window.addCleanup(()=>i.removeEventListener("click",e))}}document.addEventListener("nav",a);})();\n';
 
 // plugins/note-actions/src/components/noteactions.scss
-var noteactions_default = ".note-actions {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.4rem;\n  margin: 0 0 1.75rem 0;\n}\n.note-actions .note-actions-btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.35rem;\n  padding: 0.25rem 0.6rem;\n  border: 1px solid var(--lightgray);\n  border-radius: 6px;\n  background: transparent;\n  color: var(--gray);\n  font-family: var(--bodyFont);\n  font-size: 0.78rem;\n  line-height: 1.4;\n  cursor: pointer;\n  text-decoration: none;\n  transition: color 0.15s ease, border-color 0.15s ease;\n}\n.note-actions .note-actions-btn:hover {\n  color: var(--secondary);\n  border-color: var(--secondary);\n}\n.note-actions .note-actions-btn svg {\n  flex-shrink: 0;\n}\n\n@media print {\n  .sidebar.left,\n  .sidebar.right,\n  .note-actions,\n  .breadcrumb-container,\n  .backlinks,\n  .giscus,\n  footer {\n    display: none !important;\n  }\n  .page > #quartz-body {\n    display: block !important;\n  }\n  .page > #quartz-body .center {\n    max-width: 100% !important;\n    padding: 0 !important;\n  }\n}";
+var noteactions_default = ".note-actions {\n  display: flex;\n  align-items: center;\n  gap: 0.3rem;\n}\n.note-actions .note-actions-btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.35rem;\n  padding: 0.3rem 0.55rem;\n  border: 1px solid transparent;\n  border-radius: 6px;\n  background: transparent;\n  color: var(--gray);\n  font-family: var(--bodyFont);\n  font-size: 0.78rem;\n  line-height: 1.4;\n  cursor: pointer;\n  text-decoration: none;\n  transition: color 0.15s ease, background 0.15s ease;\n}\n.note-actions .note-actions-btn:hover {\n  color: var(--secondary);\n  background: var(--highlight);\n}\n.note-actions .note-actions-btn.icon-only {\n  padding: 0.35rem;\n}\n.note-actions .note-actions-btn svg {\n  flex-shrink: 0;\n}\n.note-actions .note-actions-dl {\n  position: relative;\n  display: inline-flex;\n}\n.note-actions .note-actions-menu {\n  position: absolute;\n  top: calc(100% + 0.35rem);\n  right: 0;\n  z-index: 20;\n  min-width: 9rem;\n  display: flex;\n  flex-direction: column;\n  padding: 0.3rem;\n  border: 1px solid var(--lightgray);\n  border-radius: 8px;\n  background: var(--light);\n  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);\n}\n.note-actions .note-actions-menu[hidden] {\n  display: none;\n}\n.note-actions .note-actions-menu > a, .note-actions .note-actions-menu > button {\n  display: block;\n  width: 100%;\n  text-align: left;\n  padding: 0.4rem 0.6rem;\n  border: none;\n  border-radius: 5px;\n  background: transparent;\n  color: var(--darkgray);\n  font-family: var(--bodyFont);\n  font-size: 0.82rem;\n  cursor: pointer;\n  text-decoration: none;\n}\n.note-actions .note-actions-menu > a:hover, .note-actions .note-actions-menu > button:hover {\n  background: var(--highlight);\n  color: var(--secondary);\n}\n\n@media print {\n  .sidebar.left,\n  .sidebar.right,\n  .note-actions,\n  .breadcrumb-container,\n  .backlinks,\n  .giscus,\n  footer {\n    display: none !important;\n  }\n  .page > #quartz-body {\n    display: block !important;\n  }\n  .page > #quartz-body .center {\n    max-width: 100% !important;\n    padding: 0 !important;\n  }\n}";
 
 // node_modules/preact/dist/preact.mjs
 var n;
@@ -274,17 +274,19 @@ var NoteActionsConstructor = (userOpts) => {
     const editUrl = `https://github.com/${opts.repo}/edit/${opts.branch}/${filePath}`;
     const mdUrl = `/${slug}.md`;
     const mdName = filePath.split("/").pop() ?? "nota.md";
+    const showDownload = opts.showDownloadMd || opts.showPdf;
     return /* @__PURE__ */ u2("div", { class: `note-actions ${displayClass ?? ""}`, children: [
-      opts.showDownloadMd && /* @__PURE__ */ u2(
-        "a",
-        {
-          class: "note-actions-btn",
-          href: mdUrl,
-          download: mdName,
-          title: "Baixar como Markdown (.md)",
-          "aria-label": "Baixar como Markdown",
-          children: [
-            /* @__PURE__ */ u2(
+      showDownload && /* @__PURE__ */ u2("div", { class: "note-actions-dl", children: [
+        /* @__PURE__ */ u2(
+          "button",
+          {
+            class: "note-actions-btn icon-only",
+            id: "note-actions-download",
+            title: "Baixar",
+            "aria-label": "Baixar",
+            "aria-haspopup": "true",
+            "aria-expanded": "false",
+            children: /* @__PURE__ */ u2(
               "svg",
               {
                 xmlns: "http://www.w3.org/2000/svg",
@@ -302,72 +304,41 @@ var NoteActionsConstructor = (userOpts) => {
                   /* @__PURE__ */ u2("line", { x1: "12", y1: "15", x2: "12", y2: "3" })
                 ]
               }
-            ),
-            /* @__PURE__ */ u2("span", { children: ".md" })
-          ]
-        }
-      ),
-      opts.showPdf && /* @__PURE__ */ u2(
-        "button",
-        {
-          class: "note-actions-btn",
-          id: "note-actions-print",
-          title: "Imprimir ou salvar como PDF",
-          "aria-label": "Imprimir ou salvar como PDF",
-          children: [
-            /* @__PURE__ */ u2(
-              "svg",
-              {
-                xmlns: "http://www.w3.org/2000/svg",
-                width: "16",
-                height: "16",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                "stroke-width": "2",
-                "stroke-linecap": "round",
-                "stroke-linejoin": "round",
-                children: [
-                  /* @__PURE__ */ u2("polyline", { points: "6 9 6 2 18 2 18 9" }),
-                  /* @__PURE__ */ u2("path", { d: "M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" }),
-                  /* @__PURE__ */ u2("rect", { x: "6", y: "14", width: "12", height: "8" })
-                ]
-              }
-            ),
-            /* @__PURE__ */ u2("span", { children: "PDF" })
-          ]
-        }
-      ),
+            )
+          }
+        ),
+        /* @__PURE__ */ u2("div", { class: "note-actions-menu", id: "note-actions-menu", hidden: true, children: [
+          opts.showDownloadMd && /* @__PURE__ */ u2("a", { href: mdUrl, download: mdName, "data-close-menu": true, children: "Markdown (.md)" }),
+          opts.showPdf && /* @__PURE__ */ u2("button", { type: "button", id: "note-actions-pdf", "data-close-menu": true, children: "PDF" })
+        ] })
+      ] }),
       opts.showFullscreen && /* @__PURE__ */ u2(
         "button",
         {
-          class: "note-actions-btn",
+          class: "note-actions-btn icon-only",
           id: "note-actions-fullscreen",
-          title: "Alternar tela cheia",
+          title: "Tela cheia",
           "aria-label": "Alternar tela cheia",
-          children: [
-            /* @__PURE__ */ u2(
-              "svg",
-              {
-                xmlns: "http://www.w3.org/2000/svg",
-                width: "16",
-                height: "16",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                "stroke-width": "2",
-                "stroke-linecap": "round",
-                "stroke-linejoin": "round",
-                children: [
-                  /* @__PURE__ */ u2("path", { d: "M8 3H5a2 2 0 0 0-2 2v3" }),
-                  /* @__PURE__ */ u2("path", { d: "M21 8V5a2 2 0 0 0-2-2h-3" }),
-                  /* @__PURE__ */ u2("path", { d: "M3 16v3a2 2 0 0 0 2 2h3" }),
-                  /* @__PURE__ */ u2("path", { d: "M16 21h3a2 2 0 0 0 2-2v-3" })
-                ]
-              }
-            ),
-            /* @__PURE__ */ u2("span", { children: "Tela cheia" })
-          ]
+          children: /* @__PURE__ */ u2(
+            "svg",
+            {
+              xmlns: "http://www.w3.org/2000/svg",
+              width: "16",
+              height: "16",
+              viewBox: "0 0 24 24",
+              fill: "none",
+              stroke: "currentColor",
+              "stroke-width": "2",
+              "stroke-linecap": "round",
+              "stroke-linejoin": "round",
+              children: [
+                /* @__PURE__ */ u2("path", { d: "M8 3H5a2 2 0 0 0-2 2v3" }),
+                /* @__PURE__ */ u2("path", { d: "M21 8V5a2 2 0 0 0-2-2h-3" }),
+                /* @__PURE__ */ u2("path", { d: "M3 16v3a2 2 0 0 0 2 2h3" }),
+                /* @__PURE__ */ u2("path", { d: "M16 21h3a2 2 0 0 0 2-2v-3" })
+              ]
+            }
+          )
         }
       ),
       opts.showEdit && /* @__PURE__ */ u2(

@@ -1,15 +1,14 @@
 .note-actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin: 0 0 1.75rem 0;
+  align-items: center;
+  gap: 0.3rem;
 
   .note-actions-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.25rem 0.6rem;
-    border: 1px solid var(--lightgray);
+    padding: 0.3rem 0.55rem;
+    border: 1px solid transparent;
     border-radius: 6px;
     background: transparent;
     color: var(--gray);
@@ -20,15 +19,65 @@
     text-decoration: none;
     transition:
       color 0.15s ease,
-      border-color 0.15s ease;
+      background 0.15s ease;
 
     &:hover {
       color: var(--secondary);
-      border-color: var(--secondary);
+      background: var(--highlight);
+    }
+
+    &.icon-only {
+      padding: 0.35rem;
     }
 
     svg {
       flex-shrink: 0;
+    }
+  }
+
+  // Menu de download (md / pdf)
+  .note-actions-dl {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .note-actions-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    right: 0;
+    z-index: 20;
+    min-width: 9rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.3rem;
+    border: 1px solid var(--lightgray);
+    border-radius: 8px;
+    background: var(--light);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+
+    &[hidden] {
+      display: none;
+    }
+
+    & > a,
+    & > button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.4rem 0.6rem;
+      border: none;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--darkgray);
+      font-family: var(--bodyFont);
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover {
+        background: var(--highlight);
+        color: var(--secondary);
+      }
     }
   }
 }
