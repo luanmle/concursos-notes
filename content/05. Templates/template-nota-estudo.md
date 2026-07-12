@@ -82,7 +82,6 @@ aliases:
 ID: "<% id %>"
 tipo: estudo-concurso
 disciplina: "<% nomeDisciplina %>"
-assunto: "<% tituloNota %>"
 topico: "<% topico %>"
 subtopico: "<% subtopico %>"
 fonte: # Videoaula, PDF, Cursinho

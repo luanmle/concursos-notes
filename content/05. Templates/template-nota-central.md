@@ -46,7 +46,6 @@ aliases:
 ID: "<% id %>"
 tipo: central-de-estudos
 categoria: "<% categoria.valor %>"
-assunto: "<% assunto %>"
 contexto:
 concurso: "<% concurso %>"
 status: "<% status %>"

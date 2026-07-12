@@ -57,11 +57,12 @@ Ative **Enable Folder Templates** e cadastre as regras abaixo:
 |---|---|
 | `00. Entrada` | `05. Templates/template-nota-estudo.md` |
 | `01. Central de Estudos/Notas` | `05. Templates/template-nota-central.md` |
+| `01. Central de Estudos/Notas/Editais Verticalizados` | `05. Templates/template-edital-verticalizado.md` |
 | `02. Disciplinas` | `05. Templates/template-moc-disciplina.md` |
 
 Se `01. Central de Estudos/Notas` ainda não existir, crie essa pasta pelo explorador de arquivos do Obsidian antes de cadastrar a regra.
 
-Caso o Templater permita reordenar as regras, mantenha a regra mais específica da Central antes de regras mais genéricas.
+Caso o Templater permita reordenar as regras, mantenha a regra de `Editais Verticalizados` antes da regra mais genérica `01. Central de Estudos/Notas`.
 
 ## 5. Configurar a criação de novos arquivos
 
@@ -112,6 +113,16 @@ Categorias disponíveis:
 - Pós-edital em andamento.
 
 Conforme a categoria, o template também pode solicitar concurso, status e data da prova. A nota recebe uma tag `central/<categoria>` e passa a aparecer no MOC correspondente.
+
+### Edital verticalizado detalhado
+
+Para usar o template específico, crie a nota em:
+
+```text
+01. Central de Estudos/Notas/Editais Verticalizados
+```
+
+Esse template solicita concurso, órgão, cargo, banca, identificação do edital, status e datas. Ele também cria a tabela para verticalizar os itens do conteúdo programático.
 
 ## 8. Criação de MOCs de disciplina
 

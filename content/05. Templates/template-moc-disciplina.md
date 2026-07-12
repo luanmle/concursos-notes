@@ -17,7 +17,7 @@ tags:
 As notas criadas com a tag `#disciplina/<% tagDisciplina %>` aparecem aqui automaticamente:
 
 ```dataview
-TABLE assunto AS "Assunto", topico AS "Tópico"
+TABLE aliases[0] AS "Assunto", topico AS "Tópico"
 FROM #disciplina/<% tagDisciplina %>
 WHERE tipo = "estudo-concurso"
 SORT topico ASC
