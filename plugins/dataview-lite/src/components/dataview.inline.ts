@@ -168,7 +168,10 @@ function matchesWhere(e: Entry, where: Query["where"]): boolean {
 }
 
 function fileLink(e: Entry): string {
-  return `<a href="/${encodeURI(e.slug)}" class="internal">${escapeHtml(e.title)}</a>`
+  const currentSlug = document.body.dataset.slug ?? "index"
+  const depth = currentSlug.split("/").length - 1
+  const root = depth === 0 ? "./" : "../".repeat(depth)
+  return `<a href="${root}${encodeURI(e.slug)}" class="internal">${escapeHtml(e.title)}</a>`
 }
 
 function renderValue(e: Entry, expr: string): string {
